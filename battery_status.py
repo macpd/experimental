@@ -1,7 +1,7 @@
 #! /usr/bin/python2
 """Prints simple state of the battery charge percent and AC adapter connection.
 
-  Only test on lenovo laptops.
+  Only tested on lenovo laptops.
 
   This scripts is intended to be flexible to lenovo's firmware which names
   files energy_* when booted from battery, and charge_* when booted with AC

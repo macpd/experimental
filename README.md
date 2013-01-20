@@ -9,7 +9,7 @@ Current Contents
 
 + *volume_status.py* A simple pyhton script that prints the volume of alsa's master channel with a 'M' if muted.
 
-        $ ./volume_status.py # muted
+        $ ./volume_status.py # unmuted
         100%
         $ ./volume_status.py # muted
         100% M

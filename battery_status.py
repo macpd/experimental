@@ -1,5 +1,12 @@
-#! /usr/bin/python
-"""Prints simple state of the AC adapter and battery infromation."""
+#! /usr/bin/python2
+"""Prints simple state of the battery charge percent and AC adapter connection.
+
+  Only test on lenovo laptops.
+
+  This scripts is intended to be flexible to lenovo's firmware which names
+  files energy_* when booted from battery, and charge_* when booted with AC
+  power connected.
+"""
 
 import argparse
 import os
@@ -7,18 +14,17 @@ import sys
 
 
 class Error(Exception):
-  pass
+  """Base Error Class."""
 
 class DirectoryNotFoundError(Error):
   """Raised when a specified directory doesn't exist or is unreadable."""
-  pass
 
 class BatteryStatus:
   """Class to read and parse battery charge infomation."""
 
-  DEFAULT_POWER_STATE_DIR = "/sys/class/power_supply/"
-  DEFAULT_AC_STATE_FILE = "AC/online"
-  DEFAULT_BATTERY_STATE_DIR = "BAT0/"
+  DEFAULT_POWER_STATE_DIR = '/sys/class/power_supply/'
+  DEFAULT_AC_STATE_FILE = 'AC/online'
+  DEFAULT_BATTERY_STATE_DIR = 'BAT0/'
   DEFAULT_BATTERY_PREFIXES = set(('energy', 'charge'))
   DEFAULT_CURRENT_STATE_SUFFIX = 'now'
   DEFAULT_FULL_STATE_SUFFIX = 'full'
@@ -41,18 +47,18 @@ class BatteryStatus:
     self.cur_state_suffix = current_state_suffix or self.DEFAULT_CURRENT_STATE_SUFFIX
     self.full_state_suffix = full_state_suffix or self.DEFAULT_FULL_STATE_SUFFIX
     if self.verbose_mode:
-      print "Versbose mode."
-      print "Power state dir: %s" % self.power_state_dir
-      print "AC state file: %s" % self.ac_state_fname
-      print "Battery state dir: %s" % self.battery_state_dir
-      print "Batter state file prefixes: %s" % self.battery_prefixes
-      print "Current state suffix: %s" % self.cur_state_suffix
-      print "Full state suffix: %s" % self.full_state_suffix
+      print 'Versbose mode.'
+      print 'Power state dir: %s' % self.power_state_dir
+      print 'AC state file: %s' % self.ac_state_fname
+      print 'Battery state dir: %s' % self.battery_state_dir
+      print 'Batter state file prefixes: %s' % self.battery_prefixes
+      print 'Current state suffix: %s' % self.cur_state_suffix
+      print 'Full state suffix: %s' % self.full_state_suffix
 
   def FileNamesWithPatternInDir(self, dirname, prefixes=[], suffixes=[]):
     """Returns a list of all files that start with prefix and end with suffix in the given dir."""
     if self.verbose_mode:
-      print "Looking in %s for files starting with %r and ending with %r" % (dirname, prefixes, suffixes)
+      print 'Looking in %s for files starting with %r and ending with %r' % (dirname, prefixes, suffixes)
 
     # directory sanity check
     if not os.path.exists(dirname):
@@ -78,7 +84,7 @@ class BatteryStatus:
             matches.append(os.path.join(dirname, fname))
 
     if self.verbose_mode:
-      print "Found matches: %r" % matches
+      print 'Found matches: %r' % matches
     return matches
 
 
@@ -87,9 +93,9 @@ class BatteryStatus:
     full_capacity_fname = self.FileNamesWithPatternInDir(self.battery_state_dir, self.battery_prefixes, suffixes=self.full_state_suffix)
     if self.verbose_mode:
       if full_capacity_fname:
-        print "Full capacity filename: %s" % full_capacity_fname
+        print 'Full capacity filename: %s' % full_capacity_fname
       else:
-        print "No match found"
+        print 'No match found'
 
     return full_capacity_fname[0]
 
@@ -98,21 +104,21 @@ class BatteryStatus:
     cur_capacity_fname = self.FileNamesWithPatternInDir(self.battery_state_dir, prefixes=self.battery_prefixes, suffixes=self.cur_state_suffix)
     if not cur_capacity_fname:
       if  self.verbose_mode:
-        print "No match found"
+        print 'No match found'
       return None
     return cur_capacity_fname[0]
 
   def IsOnACPower(self):
     """Reads state of AC power connection."""
     if self.verbose_mode:
-      print "Searching %s for state of AC power" % self.ac_state_fname
+      print 'Searching %s for state of AC power' % self.ac_state_fname
     state_fname = open(self.ac_state_fname,'r')
     state_raw_info = state_fname.read()
     state_fname.close()
     if self.verbose_mode:
-      print "%s: %s" % (self.ac_state_fname, state_raw_info)
+      print '%s: %s' % (self.ac_state_fname, state_raw_info)
 
-    return state_raw_info.find("1") != -1
+    return state_raw_info.find('1') != -1
 
   def FullBatteryCapacity(self, fname):
     """Reads max battery capcity."""
@@ -121,11 +127,11 @@ class BatteryStatus:
     info_fname.close()
     max_capacity = float(info_text)
     if self.verbose_mode:
-      print "%s: %s" % (fname, max_capacity)
+      print '%s: %s' % (fname, max_capacity)
     if max_capacity:
       return max_capacity
     else:
-      sys.stderr.write("[Error] battery max capacity not found!")
+      sys.stderr.write('[Error] battery max capacity not found!')
 
   def CurrentBatteryCapacity(self, fname):
     """Reads current battery capacity."""
@@ -134,37 +140,37 @@ class BatteryStatus:
     state_fname.close()
     curr_capacity = float(state_text)
     if self.verbose_mode:
-      print "%s: %s" % (fname, curr_capacity)
+      print '%s: %s' % (fname, curr_capacity)
     if curr_capacity:
       return curr_capacity
     else:
-      sys.stderr.write("[Error] battery current capacity not found!")
+      sys.stderr.write('[Error] battery current capacity not found!')
 
   def ChargePercent(self, percision=1):
     """Calculates percent charge."""
     battery_full_charge_fname = self.GetFullCapacatiyFileName()
     battery_curr_charge_fname = self.GetCurCapacityFileName()
     if not (battery_full_charge_fname and battery_curr_charge_fname):
-      sys.stderr.write("Battery capacity information not found in %s" % self.battery_state_dir)
+      sys.stderr.write('Battery capacity information not found in %s' % self.battery_state_dir)
       sys.exit(1)
     full_cap = self.FullBatteryCapacity(battery_full_charge_fname)
     curr_cap = self.CurrentBatteryCapacity(battery_curr_charge_fname)
     curr_percent = (curr_cap/full_cap) * 100
     if self.verbose_mode:
-      print "Capacity: %f" % curr_percent
-    return "%.*f" % (percision, curr_percent)
+      print 'Capacity: %f' % curr_percent
+    return '%.*f' % (percision, curr_percent)
 
   def ACConnectionSymbol(self):
-    return "+" if self.IsOnACPower() else "-"
+    return '+' if self.IsOnACPower() else '-'
 
 def main():
   """Parses args, creates battery status object, and prints charge info."""
   parser = argparse.ArgumentParser(
-  description=("Read battery information from %s (atempting to find correct "
-               "files), print percent remaining and whether charging (+) or "
-               "dishcharging(-)") % (BatteryStatus.DEFAULT_BATTERY_STATE_DIR))
-  parser.add_argument('-v','--verbose',action='store_true',default=False, help="verbose mode")
-  parser.add_argument('-d', '--base_dir', dest='power_dir',  metavar="DIR", help="Alternative directory to find power information files.")
+  description=('Read battery information from %s (atempting to find correct '
+               'files), print percent remaining and whether charging (+) or '
+               'dishcharging(-)') % (BatteryStatus.DEFAULT_BATTERY_STATE_DIR))
+  parser.add_argument('-v','--verbose',action='store_true',default=False, help='verbose mode')
+  parser.add_argument('-d', '--base_dir', dest='power_dir',  metavar='DIR', help='Alternative directory to find power information files.')
   parser.add_argument('-b', '--battery', dest='battery', metavar='BATTERY', help='Battery to display charge of. ie \'BAT0\'.')
   parser.add_argument('-a', '--ac_state_file', dest='ac_state_fname',  metavar='FILE', help='File to get AC state. Unless a full path, will be assumed relative to BASE_DIR.')
   #TODO provide args for battery state prefixes, and suffixes
@@ -176,12 +182,12 @@ def main():
   bat = BatteryStatus(power_state_dir=args.power_dir, ac_state_fname=args.ac_state_fname, battery_state_dir=args.battery, verbose=args.verbose)
 
   try:
-    print "%s %s" % (bat.ChargePercent(), bat.ACConnectionSymbol())
+    print '%s %s' % (bat.ChargePercent(), bat.ACConnectionSymbol())
   except DirectoryNotFoundError as e:
     sys.stderr.write('Unable to find a default or specified directory: %s\n' % e)
     sys.exit(-1)
 
   sys.exit(0)
 
-if __name__ == "__main__":
+if __name__ == '__main__':
   main()

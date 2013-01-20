@@ -8,9 +8,18 @@ Current Contents
 ----------------
 
 + *volume_status.py* A simple pyhton script that prints the volume of alsa's master channel with a 'M' if muted.
+        $ ./volume_status.py # muted
+        100%
+        $ ./volume_status.py # muted
+        100% M
 
 
 + *battery_status.py* Python script that battery and AC adapter info in a very naive way. Outputs battery percent and +/- to indicate charging/discharging respectively.  Alternate power info dir, ac state file, or battery can be specified via flags
+
+        $ ./battery_status.py # charging
+        93.0 +
+        $ ./battery_status.py # discharging
+        93.3 -
 
         $ ./battery_status.py --help
         usage: battery_status.py [-h] [-v] [-d DIR] [-b BATTERY] [-a FILE]

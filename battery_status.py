@@ -158,7 +158,7 @@ class BatteryStatus:
     return "+" if self.IsOnACPower() else "-"
 
 def main():
-"""Parses args, creates battery status object, and prints charge info."""
+  """Parses args, creates battery status object, and prints charge info."""
   parser = argparse.ArgumentParser(
   description=("Read battery information from %s (atempting to find correct "
                "files), print percent remaining and whether charging (+) or "

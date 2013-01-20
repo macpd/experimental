@@ -3,7 +3,6 @@
 # prints on-line if connected, off-line elsewise
 
 import argparse
-#import logging
 import os
 import sys
 

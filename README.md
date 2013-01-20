@@ -12,6 +12,7 @@ Current Contents
 
 + *battery_status.py* Python script that battery and AC adapter info in a very naive way. Outputs battery percent and +/- to indicate charging/discharging respectively.  Alternate power info dir, ac state file, or battery can be specified via flags
 
+        $ ./battery_status.py --help
         usage: battery_status.py [-h] [-v] [-d DIR] [-b BATTERY] [-a FILE]
 
         Read battery information from BAT0/ (atempting to find correct files), print

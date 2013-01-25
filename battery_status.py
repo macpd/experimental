@@ -199,6 +199,9 @@ def main():
       help='Current battery filename siffix. default: \'now\'')
   parser.add_argument('-f', '--full_suffix', dest='full_suffix',
       metavar='SUFFIX', help='Full battery filename siffix. default: \'full\'')
+  parser.add_argument('-s', '--no_ac_status', dest='show_ac_status',
+      action='store_false', default=True, help=('Dont print the +/- indicating '
+      'AC connection status'))
 
   args = parser.parse_args()
   if args.battery and not args.battery.startswith('BAT'):
@@ -213,7 +216,10 @@ def main():
       full_state_suffix=args.full_suffix)
 
   try:
-    print '%s %s' % (bat.ChargePercent(), bat.ACConnectionSymbol())
+    output = bat.ChargePercent()
+    if args.show_ac_status:
+      output = '%s %s' % (output, bat.ACConnectionSymbol())
+    print output
   except DirectoryNotFoundError as e:
     sys.stderr.write('Unable to find a default or specified directory: %s\n' % e)
     sys.exit(-1)

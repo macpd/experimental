@@ -55,14 +55,17 @@ class BatteryStatus:
       print 'Current state suffix: %s' % self.cur_state_suffix
       print 'Full state suffix: %s' % self.full_state_suffix
 
-  def FileNamesWithPatternInDir(self, dirname, prefixes=[], suffixes=[]):
-    """Returns a list of all files that start with prefix and end with suffix in the given dir."""
+  def FileNamesWithPatternInDir(self, dirname, prefixes=None, suffixes=None):
+    """Lists all files starting with prefix and ending suffix in the given dir."""
     if self.verbose_mode:
       print 'Looking in %s for files starting with %r and ending with %r' % (dirname, prefixes, suffixes)
 
     # directory sanity check
     if not os.path.exists(dirname):
       raise DirectoryNotFoundError(dirname)
+
+    prefixes = prefixes or []
+    suffixes = suffixes or []
 
     if isinstance(prefixes, str):
       prefixes = [prefixes]

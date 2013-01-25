@@ -29,7 +29,14 @@ class BatteryStatus:
   DEFAULT_CURRENT_STATE_SUFFIX = 'now'
   DEFAULT_FULL_STATE_SUFFIX = 'full'
 
-  def __init__(self, power_state_dir=None, ac_state_fname=None, battery_state_dir=None, battery_state_prefixes=None, current_state_suffix=None, full_state_suffix=None, verbose=False):
+  def __init__(self,
+               power_state_dir=None,
+               ac_state_fname=None,
+               battery_state_dir=None,
+               battery_state_prefixes=None,
+               current_state_suffix=None,
+               full_state_suffix=None,
+               verbose=False):
     """Initializes Battery Status object.
 
       Args:
@@ -41,8 +48,10 @@ class BatteryStatus:
     """
     self.verbose_mode = verbose
     self.power_state_dir = power_state_dir or self.DEFAULT_POWER_STATE_DIR
-    self.ac_state_fname = os.path.join(self.power_state_dir, (ac_state_fname or self.DEFAULT_AC_STATE_FILE))
-    self.battery_state_dir = os.path.join(self.power_state_dir, (battery_state_dir or self.DEFAULT_BATTERY_STATE_DIR))
+    self.ac_state_fname = os.path.join(self.power_state_dir,
+        (ac_state_fname or self.DEFAULT_AC_STATE_FILE))
+    self.battery_state_dir = os.path.join(self.power_state_dir,
+        (battery_state_dir or self.DEFAULT_BATTERY_STATE_DIR))
     self.battery_prefixes = battery_state_prefixes or self.DEFAULT_BATTERY_PREFIXES
     self.cur_state_suffix = current_state_suffix or self.DEFAULT_CURRENT_STATE_SUFFIX
     self.full_state_suffix = full_state_suffix or self.DEFAULT_FULL_STATE_SUFFIX
@@ -94,13 +103,14 @@ class BatteryStatus:
   def GetFullCapacatiyFileName(self):
     """Finds file full capacity filename, returns None if not found."""
     full_capacity_fname = self.FileNamesWithPatternInDir(self.battery_state_dir, self.battery_prefixes, suffixes=self.full_state_suffix)
-    if self.verbose_mode:
-      if full_capacity_fname:
+    if full_capacity_fname:
+      if self.verbose_mode:
         print 'Full capacity filename: %s' % full_capacity_fname
-      else:
+      return full_capacity_fname[0]
+    else:
+      if self.verbose_mode:
         print 'No match found'
 
-    return full_capacity_fname[0]
 
   def GetCurCapacityFileName(self):
     """Finds current capacity filename, returns None if not found."""
@@ -172,17 +182,35 @@ def main():
   description=('Read battery information from %s (atempting to find correct '
                'files), print percent remaining and whether charging (+) or '
                'dishcharging(-)') % (BatteryStatus.DEFAULT_BATTERY_STATE_DIR))
-  parser.add_argument('-v','--verbose',action='store_true',default=False, help='verbose mode')
-  parser.add_argument('-d', '--base_dir', dest='power_dir',  metavar='DIR', help='Alternative directory to find power information files.')
-  parser.add_argument('-b', '--battery', dest='battery', metavar='BATTERY', help='Battery to display charge of. ie \'BAT0\'.')
-  parser.add_argument('-a', '--ac_state_file', dest='ac_state_fname',  metavar='FILE', help='File to get AC state. Unless a full path, will be assumed relative to BASE_DIR.')
+  parser.add_argument('-v','--verbose', action='store_true', default=False,
+      help='verbose mode')
+  parser.add_argument('-d', '--base_dir', dest='power_dir',  metavar='DIR',
+      help='Alternative directory to find power information files.')
+  parser.add_argument('-b', '--battery', dest='battery', metavar='BATTERY',
+      help='Battery to display charge of. ie \'BAT0\'.')
+  parser.add_argument('-a', '--ac_state_file', dest='ac_state_fname',
+      metavar='FILE', help=('File to get AC state. Unless a full path, will be '
+        'assumed relative to BASE_DIR.'))
   #TODO provide args for battery state prefixes, and suffixes
+  parser.add_argument('-p', '--prefix', dest='prefix', metavar='PREFIX(ES)',
+      action='append', help=('battery status filename prefix. Thinkpads are '
+      'notorious for flip flopping between \'energy\' and \'charge\'.'))
+  parser.add_argument('-n', '--now_suffix', dest='now_suffix', metavar='SUFFIX',
+      help='Current battery filename siffix. default: \'now\'')
+  parser.add_argument('-f', '--full_suffix', dest='full_suffix',
+      metavar='SUFFIX', help='Full battery filename siffix. default: \'full\'')
 
   args = parser.parse_args()
   if args.battery and not args.battery.startswith('BAT'):
     args.battery = 'BAT%s' % args.battery
 
-  bat = BatteryStatus(power_state_dir=args.power_dir, ac_state_fname=args.ac_state_fname, battery_state_dir=args.battery, verbose=args.verbose)
+  bat = BatteryStatus(power_state_dir=args.power_dir,
+      ac_state_fname=args.ac_state_fname,
+      battery_state_dir=args.battery,
+      verbose=args.verbose,
+      battery_state_prefixes=args.prefix,
+      current_state_suffix=args.now_suffix,
+      full_state_suffix=args.full_suffix)
 
   try:
     print '%s %s' % (bat.ChargePercent(), bat.ACConnectionSymbol())

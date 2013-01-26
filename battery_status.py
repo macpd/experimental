@@ -191,7 +191,6 @@ def main():
   parser.add_argument('-a', '--ac_state_file', dest='ac_state_fname',
       metavar='FILE', help=('File to get AC state. Unless a full path, will be '
         'assumed relative to BASE_DIR.'))
-  #TODO provide args for battery state prefixes, and suffixes
   parser.add_argument('-p', '--prefix', dest='prefix', metavar='PREFIX(ES)',
       action='append', help=('battery status filename prefix. Thinkpads are '
       'notorious for flip flopping between \'energy\' and \'charge\'.'))

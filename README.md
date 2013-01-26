@@ -24,6 +24,7 @@ Current Contents
 
         $ ./battery_status.py --help
         usage: battery_status.py [-h] [-v] [-d DIR] [-b BATTERY] [-a FILE]
+                                 [-p PREFIXES] [-n SUFFIX] [-f SUFFIX] [-s]
 
         Read battery information from BAT0/ (atempting to find correct files), print
         percent remaining and whether charging (+) or dishcharging(-)
@@ -38,3 +39,12 @@ Current Contents
           -a FILE, --ac_state_file FILE
                                 File to get AC state. Unless a full path, will be
                                 assumed relative to BASE_DIR.
+          -p PREFIX(ES), --prefix PREFIX(ES)
+                                battery status filename prefix. Thinkpads are
+                                notorious for flip flopping between 'energy' and
+                                'charge'.
+          -n SUFFIX, --now_suffix SUFFIX
+                                Current battery filename siffix. default: 'now'
+          -f SUFFIX, --full_suffix SUFFIX
+                                Full battery filename siffix. default: 'full'
+          -s, --no_ac_status    Dont print the +/- indicating AC connection status

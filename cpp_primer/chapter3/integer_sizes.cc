@@ -12,7 +12,7 @@ int main() {
   long long llong_var = LLONG_MAX;
 
   std::cout << "integer type widths for the system this was compiled on." << std::endl;
-  std::cout << "1 byte: " << CHAR_BIT << "bits." << std::endl;
+  std::cout << "1 byte: " << CHAR_BIT << " bits." << std::endl;
   std::cout << "short: " << sizeof(short_var) << " bytes ; " << CONVERT_BYTES_TO_BITS(sizeof(short_var)) << " bits." << std::endl;
   std::cout << "int: " << sizeof(int_var) << " bytes ; " << CONVERT_BYTES_TO_BITS(sizeof(int_var)) << " bits." << std::endl;
   std::cout << "long: " << sizeof(long_var) << " bytes ; " << CONVERT_BYTES_TO_BITS(sizeof(long_var)) << " bits." << std::endl;

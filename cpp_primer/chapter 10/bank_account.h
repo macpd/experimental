@@ -19,6 +19,9 @@ class BankAccount {
     bool deposit(double amount);
     bool withdrawl(double amount);
     const double get_balance() { return this->balance; }
+    const string & get_account_holder_name() {
+      return this->account_holder_name; }
+    const string & get_account_number() { return this->account_number; };
 };
 
 #endif

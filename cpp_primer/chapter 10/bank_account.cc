@@ -20,8 +20,8 @@ void BankAccount::print() {
   using std::cout;
   using std::endl;
   cout << "Account Holder Name: " << account_holder_name << endl;
-  cout << "Account Number: " << account_number;
-  cout << "Balance: $" << balance;
+  cout << "Account Number: " << account_number << endl;
+  cout << "Balance: $" << balance << endl;
 }
 
 bool BankAccount::deposit(double amount) {

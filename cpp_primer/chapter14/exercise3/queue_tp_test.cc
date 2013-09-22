@@ -8,6 +8,9 @@ int main() {
   QueueTP<string> s_queue;
 
   QueueTP<int>* del = new QueueTP<int>;
+  for(int i = 0; i < 10 ; i++) {
+    del->Push(i);
+  }
   delete del;
 
   QueueTP<int> int_queue;
@@ -16,15 +19,16 @@ int main() {
     int_queue.Push(i);
   }
 
+  while(!int_queue.IsEmpty()) {
+    std::cout << int_queue.Pop() << std::endl;
+  }
+
+  std::cout << "\n";
   std::cout << "3 strings please:" << std::endl;
   string temp;
   for(int i = 0; i < 3; i++) {
     getline(std::cin, temp);
     s_queue.Push(temp);
-  }
-
-  while(!int_queue.IsEmpty()) {
-    std::cout << int_queue.Pop() << std::endl;
   }
 
   while(!s_queue.IsEmpty()) {

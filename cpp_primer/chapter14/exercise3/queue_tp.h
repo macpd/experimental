@@ -24,6 +24,7 @@ class QueueTP {
       };
     Node<T>* head;
     Node<T>* tail;
+    QueueTP<T> & operator=(const QueueTP<T>);
   public:
     QueueTP() { head = tail = NULL; };
     QueueTP(const T & t);

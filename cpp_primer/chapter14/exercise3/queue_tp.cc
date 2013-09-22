@@ -1,25 +1,24 @@
 #include "queue_tp.h"
 
 template <typename T>
-QueueTP<T>::QueueTP(T& t) {
+QueueTP<T>::QueueTP(const T& t) {
   head = new Node<T>;
   tail = head;
   head->val = t;
   head->next = tail->next = NULL;
 }
 
-template <typename T>
+/* template <typename T>
 QueueTP<T>::QueueTP(T t) {
   head = new Node<T>;
   tail = head;
   head->val = t;
   head->next = tail->next = NULL;
-}
+} */
 
 template <typename T>
 QueueTP<T>::QueueTP(const QueueTP & q) {
   head = new Node<T>;
-  //*head = *(q.head);
   Node<T>* temp = head;
   Node<T>* other_temp = *(q.head);
   while(other_temp != NULL) {
@@ -43,11 +42,10 @@ QueueTP<T>::~QueueTP() {
     cur = cur->next;
     delete head;
   }
-  delete tail;
 }
 
 template <typename T>
-void QueueTP<T>::Push(T& t) {
+void QueueTP<T>::Push(const T& t) {
   if(IsEmpty()) {
     head = new Node<T>;
     head->val = t;
@@ -83,8 +81,7 @@ T QueueTP<T>::Pop() {
   return ret;
 }
 
-template <typename T>
+/* template <typename T>
 bool QueueTP<T>::IsEmpty() {
   return head == NULL ? true : false;
-}
-
+} */

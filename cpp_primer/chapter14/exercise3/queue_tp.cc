@@ -2,7 +2,7 @@
 
 template <typename T>
 QueueTP<T>::QueueTP(const T& t) {
-  head = new Node<T>;
+  head = new Node;
   tail = head;
   head->val = t;
   head->next = tail->next = NULL;
@@ -10,7 +10,7 @@ QueueTP<T>::QueueTP(const T& t) {
 
 /* template <typename T>
 QueueTP<T>::QueueTP(T t) {
-  head = new Node<T>;
+  head = new Node;
   tail = head;
   head->val = t;
   head->next = tail->next = NULL;
@@ -18,12 +18,12 @@ QueueTP<T>::QueueTP(T t) {
 
 template <typename T>
 QueueTP<T>::QueueTP(const QueueTP & q) {
-  head = new Node<T>;
-  Node<T>* temp = head;
-  Node<T>* other_temp = *(q.head);
+  head = new Node;
+  Node* temp = head;
+  Node* other_temp = *(q.head);
   while(other_temp != NULL) {
     temp->val = other_temp->val;
-    temp->next = new Node<T>;
+    temp->next = new Node;
     temp = temp->next;
     other_temp = other_temp->next;
   }
@@ -35,7 +35,7 @@ QueueTP<T>::~QueueTP() {
   if(head == NULL) {
     return;
   }
-  Node<T>* cur = head->next;
+  Node* cur = head->next;
   delete head;
   while(cur != NULL) {
     head = cur;
@@ -47,11 +47,11 @@ QueueTP<T>::~QueueTP() {
 template <typename T>
 void QueueTP<T>::Push(const T& t) {
   if(IsEmpty()) {
-    head = new Node<T>;
+    head = new Node;
     head->val = t;
     tail = head;
   } else {
-    tail->next = new Node<T>;
+    tail->next = new Node;
     tail = tail->next;
     tail->val = t;
   }
@@ -61,11 +61,11 @@ void QueueTP<T>::Push(const T& t) {
 template <typename T>
 void QueueTP<T>::Push(T t) {
   if(IsEmpty()) {
-    head = new Node<T>;
+    head = new Node;
     head->val = t;
     tail = head;
   } else {
-    tail->next = new Node<T>;
+    tail->next = new Node;
     tail = tail->next;
     tail->val = t;
   }
@@ -75,13 +75,8 @@ void QueueTP<T>::Push(T t) {
 template <typename T>
 T QueueTP<T>::Pop() {
   T ret = head->val;
-  Node<T>* temp = head;
+  Node* temp = head;
   head = head->next;
   delete temp;
   return ret;
 }
-
-/* template <typename T>
-bool QueueTP<T>::IsEmpty() {
-  return head == NULL ? true : false;
-} */

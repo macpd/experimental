@@ -7,23 +7,22 @@
 template <typename T>
 class QueueTP {
   private:
-    template <typename TT>
       class Node {
         public:
-          TT val;
-          Node<TT>* next;
+          T val;
+          Node* next;
           Node() {next = NULL;}
-          Node(Node<TT> & n) { val = n->val; next = NULL; }
-          explicit Node(const TT& t) {val = t; next = NULL;}
-          Node(const TT& t, const Node<TT>* n) { val = t; next = n;}
+          Node(Node & n) { val = n->val; next = NULL; }
+          explicit Node(const T& t) {val = t; next = NULL;}
+          Node(const T& t, const Node* n) { val = t; next = n;}
           // NOTE: assignment sets value of next to NULL
-          Node<TT> & operator=(const Node<TT> n) {
+          Node & operator=(const Node n) {
             val = n->val;
             next = NULL;
           }
       };
-    Node<T>* head;
-    Node<T>* tail;
+    Node* head;
+    Node* tail;
     QueueTP<T> & operator=(const QueueTP<T>);
   public:
     QueueTP() { head = tail = NULL; };

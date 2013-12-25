@@ -141,10 +141,7 @@ class BatteryStatus:
     max_capacity = float(info_text)
     if self.verbose_mode:
       print '%s: %s' % (fname, max_capacity)
-    if max_capacity:
-      return max_capacity
-    else:
-      sys.stderr.write('[Error] battery max capacity not found!')
+    return max_capacity
 
   def CurrentBatteryCapacity(self, fname):
     """Reads current battery capacity."""
@@ -154,10 +151,7 @@ class BatteryStatus:
     curr_capacity = float(state_text)
     if self.verbose_mode:
       print '%s: %s' % (fname, curr_capacity)
-    if curr_capacity:
-      return curr_capacity
-    else:
-      sys.stderr.write('[Error] battery current capacity not found!')
+    return curr_capacity
 
   def ChargePercent(self, percision=1):
     """Calculates percent charge."""

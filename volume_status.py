@@ -35,15 +35,15 @@ class VolumeStatus(object):
     else:
       return None
 
-  def _GetVolumePercent(self):
+  def GetVolumePercent(self):
     """looks for percent value of channel_name playback volume."""
     if not self.channel:
       channel= "Mono"
     vol_match = re.search(self.vol_state_regex_pattern, self.amixer_output)
     if vol_match:
-      return vol_match.group(1)
+      return int(vol_match.group(1))
     else:
-      return ""
+      return -1
 
   def IsMuted(self):
     """looks for state channel_name playback."""
@@ -53,21 +53,10 @@ class VolumeStatus(object):
     return False
 
 
-  def GetVolume(self):
-    """Parsed system info for volume & mute status.
-
-    Returns: Volume protocol buffer.
-
-    Raises: CommandError when command return value is nonzero
-    """
-    vol_str = self._GetVolumePercent()
-
-    return int(vol_str)
-
 def main():
   """Prints volume status of current machime."""
   vol_stat = VolumeStatus()
-  output = "%d%%" % (vol_stat.GetVolume())
+  output = "%d%%" % (vol_stat.GetVolumePercent())
   if vol_stat.IsMuted():
     output = "%s %s" % (output, 'M')
   print output
